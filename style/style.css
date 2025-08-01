@@ -1,0 +1,1151 @@
+:root {
+    --bg-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --header-bg: #34495e;
+    --border-color: #ecf0f1;
+    --button-bg: #e74c3c;
+    --button-hover-bg: #c0392b;
+    --input-bg: #34495e;
+    --input-text-color: white;
+    --highlight-color: #1abc9c;
+    --highlight-hover-color: #16a085;
+}
+
+#countdown {
+    font-family: monospace;
+    min-width: 160px; /* or whatever fits your max text */
+    text-align: center;
+    display: inline-block;
+  }
+  /* Custom Wednesday Modal */
+.wednesday-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 24px 32px;
+    border: 2px solid var(--highlight-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    max-width: 90%;
+    width: 400px;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+.wednesday-button-group {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.wednesday-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.wednesday-button.yes {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+}
+
+.wednesday-button.yes:hover {
+    background-color: var(--highlight-hover-color);
+    transform: scale(1.05);
+}
+
+.wednesday-button.no {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+}
+
+.wednesday-button.no:hover {
+    background-color: var(--button-hover-bg);
+    transform: scale(1.05);
+}
+
+
+#snack-dropdown {
+    width: 200px; /* Set the width of the dropdown */
+    padding: 10px; /* Add some padding for better spacing */
+    border: 1px solid #ccc; /* Light border color */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background color */
+    color: #333; /* Text color */
+    font-size: 16px; /* Font size */
+    appearance: none; /* Removes default arrow */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>'); /* Custom arrow icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+  }
+  
+  #snack-dropdown:hover {
+    border-color: #888; /* Darker border on hover */
+  }
+  
+  #snack-dropdown:focus {
+    outline: none; /* Remove default outline on focus */
+    border-color: #5b9dd9; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(91, 157, 217, 0.5); /* Light blue shadow */
+  }
+  
+
+body {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.header-left, .header-right, .info-container {
+    display: inline-block;
+    vertical-align: middle;
+}
+.info-container {
+    margin: 10px 0;
+}
+.form-group, .form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+.form-label {
+    flex: 1;
+    text-align: right;
+    color: #ecf0f1;
+    font-weight: bold;
+    padding-right: 10px;
+}
+.form-value {
+    flex: 1;
+    color: #1abc9c;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: left;
+}
+.error {
+    color: red;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+.sticky-submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1abc9c;
+    color: #ecf0f1;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.form-control {
+    max-width: 100px;
+    text-align: center;
+}
+.narrow-column {
+    text-align: center;
+}
+.time-entry-table {
+    max-width: 60%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.time-entry-table th, .time-entry-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 70%;
+}
+.time-entry-table th {
+    background-color: #34495e;
+    color: white;
+    width: 70%;
+}
+.clickable {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.time-entry-table td:hover {
+    color: #1abc9c !important;
+}
+
+
+
+.header-left .logo {
+    height: 50px;
+    cursor: pointer;
+}
+
+.navbar {
+    background-color: var(--header-bg);
+    overflow: hidden;
+    padding: 10px;  /* Add padding to space out the navbar */
+    transition: background-color 0.3s ease;
+    border-radius: 15px; /* Rounded corners for the entire navbar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for 3D effect */
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    display: inline-block;
+    color: var(--bg-color);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #16a085;
+    border-radius: 10px; /* Rounded corners for each link */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Add shadow for 3D effect */
+}
+
+.navbar ul li a:hover {
+    background-color: var(--highlight-color);
+    color: black;
+    transform: translateY(-3px); /* Lift the button slightly */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Intensify shadow for hover effect */
+}
+
+.error {
+    color: red;
+  }
+
+
+
+.pto-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around; 
+    margin: 20px 0; 
+}
+
+.right-70 {
+    float: right;
+    text-decoration: underline;
+    overflow: hidden;
+    border-right: .15em solid #000;
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end), blink .75s step-end infinite;
+    padding-right: 10%;
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid black;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px; /* Optional: Limit the maximum width */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(251, 250, 250, 0.961); /* Basic shadow for 3D effect */
+   
+}
+
+.modal-content:hover {
+    background-color: grey;
+}
+
+.modal-content p {
+    font-size: 16px;
+    color: #333; /* Text color */
+    margin-bottom: 20px; /* Space between text and buttons */
+}
+
+.modal-content button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px; /* Rounded button corners */
+    cursor: pointer;
+    font-size: 16px; /* Consistent font size */
+    transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions including 3D effect */
+    transform-style: preserve-3d; /* Enable 3D transformations */
+}
+
+#confirm-yes, #confirm-no {
+    background-color: #4CAF50; /* Green for yes, Red for no */
+    color: white;
+}
+
+#confirm-yes:hover, #confirm-no:hover {
+    animation: spin infinite 1s linear; /* Continuous spin animation */
+    transform: translateY(-3px) rotateY(360deg); /* Lift and spin the button */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow for 3D effect */
+}
+
+#confirm-no {
+    background-color: #f44336; /* Red */
+}
+
+#confirm-no:hover {
+    background-color: #e53935; /* Darker red */
+}
+
+@keyframes spin {
+    from {
+        transform: rotateX(0deg);
+    }
+    to {
+        transform: rotateX(360deg);
+    }
+}
+
+.sticky-submit {
+    position: fixed;
+    bottom: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: black;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.sticky-submit:hover {
+    background-color: var(--button-hover-bg);
+}
+
+h3 {
+    color: white;
+}
+
+.pto-info-row div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 10px; 
+}
+
+.pto-info-row h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.pto-info-row label {
+    margin-top: 10px;
+    font-size: 1em; 
+}
+
+.pto-info-row .small-input {
+    margin-top: 5px;
+    padding: 5px;
+    font-size: 1em; 
+    width: 50px; 
+}
+
+.info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+
+
+header {
+    background-color: #34495e;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.user-info {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info span {
+    font-size: 16px;
+    color: #ecf0f1;
+    font-weight: bolder;
+}
+
+#summary {
+    display: none; /* Initially hidden */
+    font-size: 14px;
+}
+
+.logout-button,
+.toggle-button {
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: #e74c3c;
+    color: #ecf0f1;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover,
+.toggle-button:hover {
+    background-color: #c0392b;
+}
+
+body.dark-mode .logout-button,
+body.dark-mode .toggle-button {
+    background-color: #3498db;
+}
+
+body.dark-mode .logout-button:hover,
+body.dark-mode .toggle-button:hover {
+    background-color: #2980b9;
+}
+
+.name-container {
+    text-align: left;
+    font-size: 18px;
+    margin: 10px 0;
+    color: #ecf0f1;
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+/* Hide scrollbar, but still scrollable */
+.time-entry-table-wrapper {
+    overflow-y: scroll; /* Ensure the element is scrollable */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.time-entry-table-wrapper::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
+
+.time-entry-table {
+    width: 100%; /* Use full width of the container */
+    max-width: 95%; /* Prevent overflow */
+    border-collapse: collapse;
+    font-size: 18px; /* Reduce font size */
+    margin: 20px auto;
+}
+
+.time-entry-table th, .time-entry-table td {
+    text-align: center;
+    padding: 5px; /* Reduce padding */
+    border: 1px solid #ecf0f1;
+    width: auto; /* Adjust column width to fit content */
+}
+
+.time-entry-table th {
+    color: #ecf0f1;
+}
+
+.time-entry-table td {
+    background-color: #34495e;
+    font-size: 16px;
+}
+
+.highlight-row {
+    background-color: #2c3e50 !important;
+    color: grey;
+}
+
+.remaining-personal-hours {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 2ch; /* Adjust based on your number width */
+}
+
+#center-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.message-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.message-box p {
+    margin-bottom: 15px;
+}
+
+.message-box button {
+    margin: 5px;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#apply-shortcut {
+    background-color: #28a745;
+    color: white;
+}
+
+#dismiss-message {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+
+.time-entry-wrapper {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    padding: 10px; /* Add padding for visual comfort */
+}
+
+#main-content {
+    display: none; /* Hide the main content initially */
+}
+
+#main-content.visible {
+    display: block; /* Show the main content after loading */
+}
+
+.time-entry-table input[type="date"],
+.time-entry-table input[type="time"],
+.time-entry-table input[type="number"],
+.time-entry-table input[type="text"],
+input[type="date"],
+input[type="text"] {
+    background-color: inherit; /* Use the same background color as the body */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.time-entry-table input[type="date"]::placeholder,
+.time-entry-table input[type="number"]::placeholder,
+input[type="date"]::placeholder,
+input[type="text"]::placeholder {
+    color: grey;
+    opacity: 1;
+    font-weight: bolder;
+}
+
+.time-entry-table input[type="time"]:-webkit-autofill,
+.time-entry-table input[type="number"]:-webkit-autofill,
+input[type="date"]:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px inherit inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+/* Form Styling */
+.form-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Adjust the gap as needed */
+}
+
+.time-entry-form {
+    width: 80%;
+    max-width: 2550px;
+    margin: 0 auto;
+    background-color: #34495e;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-label {
+    color: #ecf0f1;
+    font-weight: bold;
+    background-color: #34495e;
+}
+
+
+
+
+.input-time {
+    font-size: medium;
+}
+
+.input-date, .input-time {
+    position: relative;
+    padding-left: 30px;
+    color: grey;
+}
+
+input[type="time"],
+input[type="number"],
+input[type="date"] {
+    background-color: inherit;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px;
+    text-align: left;
+    font-weight: bolder;
+    width: 95%;
+    max-width: 200px;
+    font-size: large;
+}
+
+input[type="time"]::placeholder,
+input[type="number"]::placeholder,
+input[type="date"]::placeholder {
+    color: white;
+    opacity: 1;
+    font-weight: bolder;
+}
+
+input[type="time"]:-webkit-autofill,
+input[type="number"]:-webkit-autofill,
+input[type="date"]:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px inherit inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+/* Style for clickable span elements */
+.clickable {
+    cursor: pointer; /* Changes cursor to pointer */
+    transition: transform 0.3s ease; /* Smooth transition for the transform effect */
+  }
+  
+  /* 3D hover effect */
+  .clickable:hover {
+    transform: perspective(1000px) translateZ(10px); /* Moves the element towards the viewer */
+    color: #16a085;
+  }
+
+  .time-entry-table td input:hover {
+    transform: scale(1.4); /* Make the input field 20% larger */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Add a shadow for a 3D effect */
+    z-index: 1; /* Ensure the input field appears above other elements */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition */
+    color: #16a085 !important;
+}
+
+.time-entry-table td input {
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition */
+}
+
+  
+
+/* Style the cursor to a pointer for checkboxes */
+input[type="checkbox"] {
+    cursor: pointer;
+    transition: transform 0.6s ease; /* Transition for smooth rotation */
+  }
+  
+  /* Rotate the checkbox when it is checked */
+  input[type="checkbox"]:checked {
+    transform: rotate(360deg);
+  }
+
+  /* Style the date input field */
+input[type="date"] {
+    cursor: pointer; /* Changes cursor to pointer */
+    transition: transform 0.3s ease; /* Smooth transition for the transform effect */
+    float:right;
+  }
+  
+  /* 3D hover effect */
+  input[type="date"]:hover {
+color: #16a085;  }
+  
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.5); /* Black with opacity */
+}
+
+p {
+    color: white;
+}
+
+.modal-content {
+    background-color: black;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px;
+    text-align: center;
+    color: white;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+h2{
+    color: white;
+}
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#loading-bar-container {
+    width: 40%;
+    height: 30px; /* Adjust the height as needed */
+    background-color: #34495e; /* Same color as the nav bar background */
+    position: relative;
+    overflow: hidden;
+    margin-top: 2px; /* Adjust this to align with the solid line */
+
+    /* Centering */
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#loading-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #1abc9c; /* Solid color for the loading bar */
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+    background-size: 20px 20px;
+    position: relative;
+    transition: width 0.4s ease-in-out;
+    animation: loading-stripes 1s linear infinite;
+}
+
+#loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+@keyframes loading-stripes {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 40px 0; /* Adjust to control the speed of the animation */
+    }
+}
+
+
+#content {
+    visibility: hidden;
+}
+
+#notification-area {
+    position: fixed;
+    top: 30%; /* Adjust this if you want it higher or lower */
+    left: 50%;
+    transform: translateX(-50%);
+    color: red;
+    padding: 10px 20px;
+    border: #000;
+    border-radius: 2px;
+    border-radius: 5px;
+    font-size: 1px;
+    z-index: 10000;
+    display: none; /* Initially hidden */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Button Styling */
+.submit-button,
+.play-pause-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1abc9c;
+    color: #ecf0f1;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.reset-button {
+    background-color: #e74c3c; /* Set a default color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #ecf0f1;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Add color transition */
+}
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+        padding: 0 10px;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
+}
+.time-entry-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+  #time-entry-table th:nth-child(12),
+  #time-entry-table td:nth-child(12) {
+    display: none;
+  }
+
+.reset-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.submit-button:hover, 
+.play-pause-button:hover {
+    background-color: #16a085;
+}
+
+.hidden {
+    display: none;
+}
+
+input[type="number"] {
+    width: calc((1ch * 6) + 10px); /* Adjust width based on the number of characters */
+    padding: 0px; /* Add padding if needed */
+    box-sizing: content-box; /* Ensure padding doesn't affect width */
+}
+
+/* General Mobile-Friendly Adjustments */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .header-left, .header-right, .info-container {
+        display: block;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    /* Reduce padding/margins for mobile */
+    .info-container, .header-right {
+        margin: 10px 0;
+    }
+
+    /* Time Entry Form */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: left;
+        gap: 10px;
+    }
+
+    .form-label {
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .sticky-submit {
+        width: 90%;
+        font-size: 19px;
+        padding: 12px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* Time Entry Table Adjustments */
+    .time-entry-table {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .time-entry-table th, .time-entry-table td {
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .narrow-column, .hours-worked-column, .work-column {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 5px;
+    }
+
+    .narrow-input, .time-input {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Inputs */
+    input[type="date"],
+    input[type="time"],
+    input[type="number"] {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .time-entry-form {
+        padding: 10px;
+    }
+
+    /* Header adjustments */
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .header-left .logo {
+        height: 50px;
+    }
+
+    #countdown-container {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .navbar ul {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .navbar ul li {
+        margin-bottom: 10px;
+    }
+
+    .navbar ul li a {
+        font-size: 14px;
+    }
+
+    /* Loading bar adjustments */
+    #loading-bar-container {
+        width: 90%;
+        height: 30px;
+    }
+
+    #loading-bar {
+        height: 100%;
+    }
+
+    #loading-text {
+        font-size: 12px;
+    }
+
+    /* Modal content */
+    .modal-content {
+        width: 90%;
+        max-width: 350px;
+        padding: 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 18px;
+    }
+
+    /* Buttons */
+    .submit-button, .reset-button, .play-pause-button {
+        width: 90%;
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+/* Small Screen Adjustments (Smartphones) */
+@media (max-width: 480px) {
+    body {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .sticky-submit {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .time-entry-table th, .time-entry-table td {
+        font-size: 12px;
+        padding: 3px;
+    }
+
+    /* Input fields */
+    input[type="date"],
+    input[type="time"],
+    input[type="number"] {
+        font-size: 12px;
+        padding: 8px;
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 10px;
+        max-width: 320px;
+    }
+
+    /* Buttons */
+    .submit-button, 
+    .reset-button, 
+    .play-pause-button {
+        width: 95%;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    /* Adjust fonts for mobile view */
+    .form-label {
+        font-size: 12px;
+    }
+
+    #loading-bar-container {
+        width: 95%;
+    }
+
+    /* Hide optional elements on small screens if needed */
+    .header-right, .info-container {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+/* Ultra-Small Screens (320px and below) */
+@media (max-width: 320px) {
+    body {
+        font-size: 10px;
+    }
+
+    .sticky-submit {
+        font-size: 10px;
+        padding: 8px;
+    }
+
+    .time-entry-table th, .time-entry-table td {
+        font-size: 10px;
+        padding: 2px;
+    }
+
+    /* Input adjustments */
+    input[type="date"],
+    input[type="time"],
+    input[type="number"] {
+        font-size: 10px;
+        padding: 5px;
+    }
+
+    .modal-content {
+        width: 100%;
+        padding: 5px;
+    }
+
+    /* Buttons */
+    .submit-button, 
+    .reset-button, 
+    .play-pause-button {
+        width: 100%;
+        font-size: 10px;
+        padding: 8px;
+    }
+}

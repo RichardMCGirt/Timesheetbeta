@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="icon" href="images/favicon3.ico" type="image/x-icon">
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>      
+        <section id="login-section" aria-labelledby="login-heading">
+            <div class="login-container">
+                <div class="logo-box">
+                    <img src="images/VANIR-transparent.png" alt="Vanir Installed Sales Logo" class="logo" style="width: 100px;">
+                </div>
+                <h1 id="login-heading">Login to Your Account</h1>
+                <form id="login-form" class="login-form" aria-describedby="login-instructions">
+                    <div class="form-fields">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="input-text email-input" required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-container">
+                                <input type="password" id="password" name="password" class="input-text" required>
+                                <button type="button" id="togglePassword" class="toggle-password-button">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <button id="loginButton" class="submit-button" type="button">Login</button>
+                <br>
+                <button id="forgotPasswordButton" class="forgot-password-button">Forgot Password?</button>
+            </div>
+            <p id="login-success" class="hidden">Login successful!</p>
+        </section>
+        <section id="joke-section">
+            <h2>Today's Joke</h2>
+            <p id="joke-text"></p>
+        </section>
+        <div id="easter-egg" class="hidden">Company founded in 2016</div>
+        <div id="easter-egg-rm" class="hidden">Developed by Richard McGirt</div>
+    </main>
+    <script src="js/login.js"></script>
+    <script>
+        document.getElementById('forgotPasswordButton').addEventListener('click', function() {
+            window.location.href = 'forgot_password.html';
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.shiftKey && event.key === 'E') {
+                const easterEgg = document.getElementById('easter-egg');
+                if (easterEgg) {
+                    easterEgg.classList.toggle('hidden');
+                }
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+                const easterEggRM = document.getElementById('easter-egg-rm');
+                if (easterEggRM) {
+                    easterEggRM.classList.toggle('hidden');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Portal</title>
+    <link rel="icon" href="/favicon3.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="style/approvetimeoff.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="timesheet.html">
+                <img src="images/vanir logo.png" alt="Vanir Installed Sales Logo" class="logo">
+            </a>
+                </div>
+                <h3>Supervisor Portal</h3>
+
+        <div class="header-right">
+            <div class="user-info">
+                <span id="user-email" class="clickable">example@example.com</span>
+                <a href="#" id="logout-button" class="logout-button">Logout</a>
+            </div>
+        </div>
+        <br>
+    </header>
+    <nav class="navbar">
+        <ul>
+            <li><a href="supervisor.html">Approve Timesheet </a></li>
+        </ul>
+        </nav>
+    <h1>Approve Time Off</h1>
+    <button id="refresh-button">Refresh</button>
+
+    <div id="requests-container">
+        <!-- Time-off requests will be dynamically loaded here -->
+    </div>
+    <div id="notification" class="notification">Record saved successfully!</div>
+
+    <script src="js/approvetimeoff.js"></script>
+    <script src="js/huntergong.js"></script>
+    <script src="js/disable-script.js"></script>
+    <link rel="icon" href="data:,">
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+### README for Vanir Installed Sales Project
+
+#### Project Overview
+This project includes a login system, background music control, and a timesheet management system for Vanir Installed Sales.
+
+#### File Structure
+- **index.html**: Main login page.
+- **login.js**: JavaScript for handling login functionality and joke fetching.
+- **musicControl.js**: JavaScript for background music control.
+- **timesheet.html**: Dashboard for time tracking.
+- **timesheet.js**: JavaScript for timesheet management.
+
+#### index.html
+This file contains the HTML structure for the login page.
+
+- **Login Form**: Users log in using their email and password.
+- **Play/Pause Button**: Toggles background music.
+- **Today's Joke Section**: Displays a random joke.
+- **Audio Element**: Background music player.
+
+#### login.js
+Handles the login functionality and joke fetching.
+
+- **login()**: Authenticates users against an Airtable database.
+- **fetchJoke()**: Fetches a random joke from an external API.
+- **debounce()**: Limits the rate at which a function can fire.
+
+#### musicControl.js
+Manages background music playback.
+
+- **Event Listeners**: Controls play/pause functionality.
+- **Session Storage**: Stores the music playing state.
+
+#### timesheet.html
+The main dashboard for managing timesheets.
+
+- **Time Entry Form**: Users can input their working hours, PTO, personal, and holiday hours.
+- **User Info**: Displays user email and logout button.
+- **PTO and Personal Time Display**: Shows available and used hours.
+
+#### timesheet.js
+Handles the timesheet functionalities.
+
+- **fetchPtoHours()**: Retrieves available PTO hours from Airtable.
+- **fetchPersonalTime()**: Retrieves available personal time hours.
+- **calculateTotalTimeWorked()**: Calculates total hours worked, including PTO, personal, and holiday hours.
+- **updatePtoHours()**: Updates the PTO hours in Airtable.
+- **updatePersonalHours()**: Updates the personal hours in Airtable.
+- **captureScreenshotAndPatch()**: Captures a screenshot of the timesheet form and uploads it to Airtable.
+
+#### Installation and Setup
+1. **Clone the repository**: `git clone <repository-url>`
+2. **Navigate to the project directory**: `cd vanir-installed-sales`
+3. **Open `index.html`**: This file serves as the entry point for the application.
+
+#### Running the Project
+1. **Ensure all necessary files are in place**: `index.html`, `login.js`, `musicControl.js`, `timesheet.html`, `timesheet.js`.
+2. **Open `index.html` in a browser**: The login page should load.
+3. **Log in with valid credentials**: Use the email and password stored in Airtable.
+4. **Navigate to the timesheet dashboard**: After logging in, you will be redirected to `timesheet.html`.
+
+#### Dependencies
+- **Airtable API**: Used for storing user information and timesheet data.
+- **Joke API**: Fetches a random joke to display on the login page.
+- **HTML2Canvas**: Captures a screenshot of the timesheet form.
+
+#### Important Notes
+- **API Keys**: Ensure that the Airtable API key and other sensitive information are kept secure.
+- **Session Management**: Uses session storage to manage the state of the background music and user authentication.
+
+#### Contact
+For any issues or further assistance, please contact the project maintainer.
+
+---
+
+This README provides an overview of the project structure, functionalities, and setup instructions. For detailed code explanations, refer to the inline comments within each file.
+
+
+Wireframe Layout for Vanir Installed Sales Project
+Below is a detailed wireframe layout for the login page and timesheet dashboard.
+
+
+Login Page Layout:
+
+
+--------------------------------------
+|          Vanir Installed Sales     |
+|              Logo                  |
+|------------------------------------|
+|               Log In               |
+|------------------------------------|
+| [Email Input Field]                |
+| [Password Input Field]             |
+|                                    |
+|          [Login Button]            |
+|------------------------------------|
+|                                    |
+|        [Play/Pause Button]         |
+|                                    |
+|------------------------------------|
+|         Today's Joke               |
+| [Joke Text Display]                |
+|                                    |
+|------------------------------------|
+| [Background Music Player (hidden)] |
+--------------------------------------
+Explanation:
+
+Vanir Logo: Displayed at the top of the page.
+Login Section: Contains email and password input fields and a login button.
+Play/Pause Button: Toggles background music.
+Today's Joke Section: Displays a random joke fetched from an API.
+Background Music Player: An audio element for background music (hidden).
+
+Timesheet Dashboard (timesheet.html)
+Timesheet Dashboard Layout:
+
+sql
+
+--------------------------------------
+|     Vanir Installed Sales          |
+|          Logo (Header)             |
+|------------------------------------|
+|          User Email                |
+|          [Logout Button]           |
+|------------------------------------|
+|    PTO Hours Available: [Value]    |
+|                                    |
+| Personal Time Used (hours): [Input]|
+|                                    |
+|------------------------------------|
+|                                    |
+|         Time Entry Form            |
+|------------------------------------|
+| Week Ending: [Date Picker]         |
+|------------------------------------|
+| [Time Entry Table]                 |
+|------------------------------------|
+| Date     | Start Time | End Time   |
+|----------|------------|------------|
+| [Input]  | [Input]    | [Input]    |
+| [Input]  | [Input]    | [Input]    |
+| ...                                |
+|------------------------------------|
+| [Reset Button]  [Submit Button]    |
+|------------------------------------|
+|        Total Hours Worked: [Value] |
+| Total Hours with PTO: [Value]      |
+| Remaining PTO Hours: [Value]       |
+| Remaining Personal Hours: [Value]  |
+|------------------------------------|
+|        [Play/Pause Button]         |
+|------------------------------------|
+| [Background Music Player (hidden)] |
+--------------------------------------
+Explanation:
+
+Header: Includes the Vanir logo and user email with a logout button.
+PTO and Personal Time Section: Displays available PTO hours and input for personal time used.
+Time Entry Form: Allows users to enter their working hours, including start time, end time, and additional time entries.
+Summary Section: Displays calculated total hours worked, total hours with PTO, and remaining PTO and personal hours.
+Play/Pause Button: Toggles background music.
+Background Music Player: An audio element for background music (hidden).

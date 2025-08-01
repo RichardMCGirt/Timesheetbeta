@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Time Tracking Software</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="icon" href="images/favicon3.ico" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body style="text-align: center;">
+    <main>
+        <header>
+            <div class="header-left">
+                <img src="images/vanir logo.png" alt="Vanir Installed Sales Logo" class="logo">
+            </div>
+            <div id="pto-info" style="display: none;">
+                <h1>PTO Hours Available: <span id="pto-hours">Loading...</span></h1>
+                <label for="personal-time">Personal time used (hours):</label>
+                <input type="number" id="personal-time" name="personal_time" min="0" max="8" step="1" value="0" class="small-input">
+            </div>
+            <div id="countdown-container" style="font-size: 18px; color: white; margin-top: 10px;">
+                <h3 id="countdown-header">Personal Hours expire in</h3>
+                <div id="countdown" style="font-size: 18px; color: white;"></div>
+            </div>
+            <div class="info-container">
+                <div id="pto-display">
+                    <p>PTO Hours Available</p>
+                    <div id="pto-hours-display" min="0">Loading...</div>
+                </div>
+                <div id="personal-display">
+                    <p>Personal Time Available</p>
+                    <div id="personal-time-display" min="0"></div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="user-email" class="clickable">example@example.com</span>
+                    <a href="#" id="logout-button" class="logout-button">Logout</a>
+                    <button id="convert-to-csv-button">Convert to CSV</button>
+                </div>
+        </header>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="timeoff.html">Request Time Off</a></li>
+            </ul>
+            <ul>
+                <li><a href="HRsub.html">HR form</a></li>
+            </ul>
+        </nav>
+<div id="wednesdayModal" class="wednesday-modal">
+  <p id="wednesdayMessage"></p>
+  <div class="wednesday-button-group">
+    <button id="wednesdayYes" class="wednesday-button yes">Yes</button>
+    <button id="wednesdayNo" class="wednesday-button no">No</button>
+  </div>
+</div>
+<div id="confirm-modal" style="display:none;">
+  <div class="modal-content">
+    <div class="confirm-message"></div>    <!-- This is where the warning goes -->
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="yes-btn">Yes, clear</button>
+      <button id="confirm-no" class="no-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+        <div id="message-container" class="right-70"></div>
+
+        <div id="loading-bar-container">
+            <div id="loading-bar">
+                <span id="loading-text">Loading...</span>
+            </div>
+        </div>
+
+        <section id="time-entry" class="time-entry">
+            <form id="time-entry-form" class="time-entry-form">
+                <div class="form-group">
+                    <label for="week-ending" class="Week-Ending" style="margin-right: 0px;">Week Ending (Tuesday):</label>
+                    <input type="date" id="week-ending" name="week_ending" required style="font-size: 20px; margin-right: 0px; max-width: fit-content;"  width="20px">
+                    
+                    <label for="approval-status" class="approved-label" style="font-size: 20px; margin-right: 50px;"></label>
+                    <span id="approval-status" style="color: red; font-size: 250px; margin-right: 50px;"></span>
+                </div>
+        
+                <!-- Wrapper for responsive table -->
+                <div class="table-responsive">
+                    <table id="time-entry-table" class="time-entry-table">
+                        <thead>
+                            <tr>
+<th class="date-column" style="border: none;"></th>
+                            <th class="date-column">Date</th>
+                            <th class="time-column">Start Time</th>
+                            <th class="time-column">Lunch Start</th>
+                            <th class="time-column">Lunch End</th>
+                            <th class="time-column">End Time</th>
+                            <th class="time-column">Additional Time In</th>
+                            <th class="time-column">Additional Time Out</th>
+                            <th class="hours-worked-column">Hours Worked</th>
+                            <th class="narrow-column">PTO Hours</th>
+                            <th class="narrow-column">Personal Hours</th>
+                            <th class="narrow-column">Holiday Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody id="time-entry-body">
+                                    <tr data-day="1">
+    <td style="text-align: center;">Wednesday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date1" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time1"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start1" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end1" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time1" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In1" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out1" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today1">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours1" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours1" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours1" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                    <tr data-day="2">
+                                            <td style="text-align: center;">Thursday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date2" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time2" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start2" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end2" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time2" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In2" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out2" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today2">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours2" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours2" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours2" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                    <tr data-day="3">
+                                                                                    <td style="text-align: center;">Friday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date3" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time3" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start3" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end3" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time3" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In3" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out3" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today3">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours3" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours3" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours3" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                    <tr data-day="4" class="highlight-row">  
+                                                                                    <td style="text-align: center;">Saturday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date4" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time4" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start4" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end4" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time4" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In4" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out4" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today4">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours4" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours4" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours4" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                    <tr data-day="5" class="highlight-row">
+                                                                                    <td style="text-align: center;">Sunday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date5" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time5" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start5" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end5" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time5" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In5" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out5" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today5">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours5" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours5" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours5" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                    
+                                    <tr data-day="6">
+                                                                                    <td style="text-align: center;">Monday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date6" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time6" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start6" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end6" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time6" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In6" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out6" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today6">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours6" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours6" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours6" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                    <tr data-day="7">
+                                             <td style="text-align: center;">Tuesday</td> <!-- Day of the week column -->
+
+                                        <td style="text-align: center;"><input type="date" name="date7" readonly></td>
+                                        <td style="text-align: center;"><input type="time" name="start_time7" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_start7" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="lunch_end7" step="900"></td>
+                                        <td style="text-align: center;"><input type="time" name="end_time7" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_In7" step="900"></td>
+                                        <td class="additional-time" style="text-align: center;"><input type="time" name="Additional_Time_Out7" step="900"></td>
+                                        <td style="text-align: center;"><span id="hours-worked-today7">0</span></td>
+                                        <td class="narrow-column"><input type="number" name="PTO_hours7" min="0" max="10" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Personal_hours7" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                        <td class="narrow-column"><input type="number" name="Holiday_hours7" min="0" max="8" step="1" class="form-control time-input narrow-input"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button id="clear-button">Clear Data</button>
+                    </form>
+                </section>
+                <div id="successModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close-button">&times;</span>
+                        <h2>Submission Successful!</h2>
+                    </div>
+                </div>
+        <!-- Modal HTML -->
+        <div id="confirm-modal" class="modal">
+            <div class="modal-content">
+                <p>Are you sure you want to clear all data?</p>
+                <button id="confirm-yes">Yes</button>
+                <button id="confirm-no">No</button>
+            </div>
+        </div>
+        <section id="summary" class="summary-section" style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+            <form id="summary-form" class="summary-form" style="display: flex; flex-direction: column; align-items: center; background-color: #34495e; padding: 20px; border-radius: 10px; width: 100%; max-width: 600px;">
+               
+<div id="pto-pers0onal-wrapper" style="display: none;">
+  <div class="form-row">
+    <label for="pto-time" class="form-label">PTO time used (hours):</label>
+    <span id="pto-time" name="pto_time" class="form-value">0</span>
+  </div>
+  <div class="form-row">
+    <label for="personal-time" class="form-label">Personal time used (hours):</label>
+    <span id="total-personal-time-display" class="form-value">0</span>
+  </div>
+</div>
+ <div class="form-row">
+                    <label for="total-time-worked" class="form-label">Total Hours Worked:</label>
+                    <span id="total-time-worked" class="form-value">0.00</span>
+                </div>
+                <div class="form-row">
+    <label for="gifted-hours" class="form-label">Gifted Hours:</label>
+    <span id="gifted-hours" class="form-value">0.00</span>
+</div>
+<div id="totals-summary">
+  <div class="form-row">
+    <label class="form-label">Total PTO Time Used:</label>
+    <span id="total-pto-used" class="form-value">0</span>
+  </div>
+  <div class="form-row">
+    <label class="form-label">Total Personal Time Used:</label>
+    <span id="total-personal-used" class="form-value">0</span>
+  </div>
+  <div class="form-row" id="holiday-row">
+    <label class="form-label">Holiday (hours):</label>
+    <span id="Holiday-hours" class="form-value">0</span>
+  </div>
+</div>
+
+                <div class="form-row">
+                    <label for="overtime" class="form-label">Overtime hours:</label>
+                    <span id="overtimehours" class="form-value">0.00</span>
+                </div>
+                <div class="form-row">
+                    <label for="total-time-with-pto" class="form-label">Total Time:</label>
+                    <span id="total-time-with-pto-value" class="form-value">0.00</span>
+                </div>
+                <div class="form-row">
+                    <label for="remaining-pto-hours" class="form-label">Remaining PTO Hours:</label>
+                    <span id="remaining-pto-hours" class="form-value">0</span>
+                    <div id="pto-hours-error" class="error" style="display: none;">Not enough PTO hours</div>
+                </div>
+                <div class="form-row">
+                    <label for="remaining-personal-hours" class="form-label">Remaining Personal Hours:</label>
+                    <span id="remaining-personal-hours" class="form-value">0</span>
+                    <div id="personal-time-error" class="error" style="display: none;">Not enough personal hours</div>
+                </div>
+                <span id="pto-validation-message" class="validation-message" style="color: red; text-align: center;"></span><br>
+                <button id="submit-button" class="sticky-submit">Submit</button>
+
+            </form>
+        </section>
+    </section>
+</main>
+<script src="js/timesheet.js"></script>
+<script src="js/timesheet2.js"></script>
+<script src="js/disable-script.js"></script>
+<script src="js/huntergong.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+<script src="js/airtablestorage.js"></script>
+<script src="js/overtimeCalculation.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+</body>
+</html>

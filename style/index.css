@@ -1,0 +1,383 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
+
+:root {
+    --bg-gradient-start: #283E51;
+    --bg-gradient-end: #4B79A1;
+    --text-color: #ecf0f1;
+    --button-bg-start: #3498db;
+    --button-bg-end: #2980b9;
+    --input-bg: #2c3e50;
+    --input-text-color: #ecf0f1;
+    --highlight-color: #e67e22;
+    --highlight-hover-color: #d35400;
+    --joke-text-color: #f5f5f5;
+    --success-text-color: #2ecc71;
+}
+
+.snowflake {
+    position: absolute;
+    color: white;
+    opacity: 1; /* Fully visible by default */
+    pointer-events: none; /* Ignore mouse events */
+    will-change: opacity; /* Optimize for opacity changes */
+}
+
+
+body {
+    font-family: 'Playfair Display', serif;
+    background: linear-gradient(to right, var(--bg-gradient-start), var(--bg-gradient-end));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: var(--text-color);
+}
+
+
+
+
+main {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    padding: 30px;
+    background-color: rgba(44, 62, 80, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.snowflake {
+    position: absolute;
+    top: 0;
+    pointer-events: none; /* So they don't interfere with clicks */
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards; /* Keeps the snowflake at the bottom */
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh); /* Move to the bottom */
+        opacity: 0.8; /* Slightly fade out if you want, optional */
+    }
+}
+
+
+
+
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.logo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 150px;
+    position: relative;
+    top: 30%;
+    transform: translateY(-0%);
+}
+
+
+.logo {
+    width: 150px;
+    height: auto;
+}
+
+.login-form {
+    width: 100%;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.input-text {
+    max-width: 100%;
+    min-width: 300px;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #bdc3c7;
+    font-size: 22px;
+    color: var(--input-text-color);
+    background-color: var(--input-bg);
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.email-input {
+    width: auto;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+#password {
+    max-width: 100px; /* Adjust as needed */
+}
+
+.toggle-password-button {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    background: #007BFF;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.toggle-password-button:hover {
+    background: #0056b3;
+}
+
+.input-text::placeholder {
+    color: #bdc3c7;
+}
+
+.input-text:focus {
+    outline: none;
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 8px rgba(230, 126, 34, 0.6);
+}
+
+.submit-button, .forgot-password-button, .play-pause-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, var(--button-bg-start), var(--button-bg-end));
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 15px;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+.submit-button:hover, .forgot-password-button:hover, .play-pause-button:hover {
+    background: linear-gradient(to right, var(--highlight-color), var(--highlight-hover-color));
+    transform: translateY(-2px);
+}
+
+.hidden {
+    display: none;
+}
+
+#login-success {
+    color: var(--success-text-color);
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+#easter-egg,
+#easter-egg-rm {
+    position: fixed;
+    bottom: 10px;
+    background-color: #1abc9c;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    z-index: 1000;
+}
+
+#easter-egg {
+    right: 10px;
+}
+
+#easter-egg-rm {
+    right: 150px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#joke-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#joke-section h2 {
+    color: var(--joke-text-color);
+    font-size: 1.5rem;
+}
+
+#joke-section p {
+    color: var(--joke-text-color);
+    font-size: 18px;
+}
+
+/* Media query for devices with max-width of 768px */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .login-container {
+        padding: 20px;
+        width: 90%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .logo-box img {
+        width: 80px; /* Reduce the size of the logo */
+        margin-bottom: 20px;
+    }
+
+    .form-fields {
+        width: 100%;
+    }
+
+    .form-group {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input-text {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .submit-button,
+    .forgot-password-button {
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 0;
+        margin-top: 10px;
+    }
+
+    #playPauseButton {
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 0;
+        margin-top: 10px;
+    }
+
+    #joke-section {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    #joke-section h2 {
+        font-size: 18px;
+    }
+
+    #joke-section p {
+        font-size: 16px;
+    }
+}
+
+/* Media query for devices with max-width of 480px */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .login-container {
+        padding: 15px;
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .logo-box img {
+        width: 60px; /* Further reduce logo size */
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .input-text {
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    .submit-button,
+    .forgot-password-button {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 0;
+        margin-top: 8px;
+    }
+
+    #playPauseButton {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 0;
+    }
+
+    #joke-section h2 {
+        font-size: 16px;
+    }
+
+    #joke-section p {
+        font-size: 14px;
+    }
+
+    #login-success {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Airtable Submission Form</title>
+      <link rel="stylesheet" href="style/HRsub.css">
+</head>
+<body>
+     <nav class="navbar">
+                <ul>
+                    <li><a href="timesheet.html">Time Sheet</a></li>
+
+                </ul>
+            </nav>
+  <div class="form-container">
+    <h2>Submit a Request</h2>
+    <form id="airtableForm">
+      <label for="requestType">Request Type</label>
+      <select id="requestType" name="requestType" required>
+        <option value="">-- Select an option --</option>
+        <option value="Payroll">Payroll</option>
+        <option value="PTO/Personal Hours">PTO/Personal Hours</option>
+        <option value="Insurance">Insurance</option>
+        <option value="401k/Retirement">401k/Retirement</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="submitterEmail">Submitter Email</label>
+      <input type="email" id="submitterEmail" name="submitterEmail" readonly>
+
+      <label for="notes">Notes From Submitter</label>
+      <textarea id="notes" name="notes" rows="4"></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+    <div id="message"></div>
+  </div>
+
+<script src="js/HRsubmission.js"></script>
+
+</body>
+</html>

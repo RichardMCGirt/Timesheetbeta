@@ -1,0 +1,30 @@
+Usage
+Login:
+
+Open index.html in a web browser.
+Enter your email and password to log in.
+If you forget your password, click on the "Forgot Password" link to navigate to forgot_password.html. Enter your email address and follow the instructions to reset your password.
+Enter Time Data:
+
+Navigate to timesheet.html.
+Enter your work hours, PTO hours, and personal hours for each day. Each day’s entry has fields for start time, lunch start, lunch end, end time, and any additional time in and out.
+The form will automatically save your data as you enter it. The total hours worked, including PTO and personal hours, will be calculated and displayed.
+Click "Submit" to submit your timesheet. You will see a confirmation message upon successful submission.
+Supervisors:
+
+Supervisors can log in and navigate to supervisor.html.
+They can view all time-off requests submitted by employees.
+Supervisors can approve or reject time-off requests directly from this page by clicking the respective buttons.
+Time-Off Requests:
+
+Employees can request time off by navigating to timeoff.html.
+Fill out the form with the details of your time-off request and submit it.
+To edit or delete a previous time-off request, locate the request in the list and use the provided options to update or remove it.
+Approve Time-Off Requests:
+
+Supervisors can approve or reject time-off requests by navigating to approvetimeoff.html.
+All pending requests will be displayed with options to approve or reject each request.
+Export to CSV:
+
+Navigate to timesheet.html.
+Click the "Export to CSV" button to download a CSV file of your time entries. This file includes the date, start time, lunch start, lunch end, end time, additional time in, additional time out, hours worked, PTO hours, personal hours, and holiday hours for each day.

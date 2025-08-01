@@ -1,0 +1,647 @@
+:root {
+    --bg-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --header-bg: #34495e;
+    --border-color: #ecf0f1;
+    --button-bg: #e74c3c;
+    --button-hover-bg: #c0392b;
+    --input-bg: #34495e;
+    --input-text-color: white;
+    --highlight-color: #1abc9c;
+    --highlight-hover-color: #f39c12; /* Changed to a more contrasting color */
+}
+
+main {
+    width: 90%;
+}
+
+html, body {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto; /* allow scrolling of the page */
+}
+
+
+.time-tracking-table.scrollable {
+  max-height: 80vh;           /* or whatever height you prefer */
+  overflow-y: auto;           /* always show vertical scroll if needed */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+}
+
+/* Optional: make scrollbars more obvious if users are confused */
+.scrollable::-webkit-scrollbar {
+  width: 10px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+/* Hide scrollbar while still allowing scrolling */
+.scrollable {
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.scrollable::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    text-align: center;
+    font-weight: bolder;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    height: 100vh;
+      overflow: auto !important; /* allow scrolling in general */
+}
+
+header {
+    background-color: var(--header-bg);
+    padding: 20px;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-left .logo {
+    height: 50px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info span {
+    font-size: 16px;
+    color: var(--text-color);
+    font-weight: bolder;
+    transition: color 0.3s ease;
+}
+
+.logout-button,
+.toggle-button {
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-button:hover,
+.toggle-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: var(--header-bg);
+    overflow: hidden;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    display: inline-block;
+    color: var(--bg-color);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #16a085;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navbar ul li a:hover {
+    background-color: var(--highlight-color);
+    color: black;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.name-container {
+    text-align: left;
+    font-size: 18px;
+    margin: 10px 0;
+    color: var(--text-color);
+    font-weight: bold;
+    padding: 20px;
+    transition: color 0.3s ease;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.name-container.hidden {
+    padding-bottom: 45px;
+}
+
+#main-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto; /* remove or auto */
+}
+
+
+.narrow-border {
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px;
+    text-align: right;
+    margin: 0 auto;
+    width: auto;
+    white-space: nowrap;
+}
+
+.narrow-border input {
+    width: auto;
+    text-align: center;
+}
+
+tr.total-row td {
+    font-weight: bold;
+}
+
+tr.approval-row td {
+    padding: 10px;
+}
+
+/* Styling the narrow-column class */
+th.narrow-column {
+    max-width: 55px;
+    text-align: center; /* Optional: To ensure text is centered */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+
+input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    accent-color: #007bff;
+}
+
+th, tr {
+    font-weight: bolder !important;
+    font-size: medium !important;
+    cursor: not-allowed;
+}
+
+input[type="time"]:not(.approve-checkbox),
+input[type="text"]:not(.approve-checkbox),
+input[type="number"]:not(.approve-checkbox),
+input[type="date"]:not(.approve-checkbox) {
+    cursor: not-allowed;
+}
+
+input[type="time"]:hover,
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="date"]:hover {
+    cursor: not-allowed;
+}
+
+input[type="time"]:disabled,
+input[type="text"]:disabled,
+input[type="number"]:disabled,
+input[type="date"]:disabled {
+    cursor: not-allowed;
+    text-align: center;
+}
+
+.table-wrapper {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    padding-bottom: 45px;
+}
+
+.scrollable {
+    max-width: 100%;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    overflow-x: auto;
+    box-sizing: border-box;
+    padding-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td, table th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.time-tracking-table {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    width: fit-content;
+}
+
+@keyframes randomEffect {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+#loading-indicator {
+    text-align: center;
+    font-size: 18px;
+    padding: 10px;
+}
+
+#header, h1 {
+    display: none;
+}
+
+.header-visible {
+    display: block;
+}
+
+input[type="time"],
+input[type="number"],
+input[type="date"] {
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+    font-size: large;
+}
+
+#submit-button {
+    position: sticky;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: var(--highlight-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#submit-button:hover {
+    background-color: #00b345;
+}
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 1s ease-in-out;
+}
+
+#loading-logo {
+    width: 15%;
+    height: 15%;
+    transition: filter 1s ease-in-out;
+    filter: grayscale(100%);
+}
+
+#loading-logo.full-color {
+    filter: grayscale(0%);
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#loading-screen.hidden {
+    display: none;
+}
+
+.notification {
+    display: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.notification.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.notification.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.time-entry-form {
+    width: 96%;
+    max-width: 2550px;
+    margin: 0 auto;
+    background-color: var(--input-bg);
+    padding: 20px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* General small device adjustments */
+@media only screen and (max-width: 768px) {
+    body {
+        height: 100vh; /* Adjust height to ensure full visibility */
+        padding-bottom: 20px; /* Extra padding to account for the URL bar */
+    }
+
+    main {
+        width: 95%; /* Make main content more compact */
+    }
+
+    header {
+        padding: 10px; /* Reduce padding for the header */
+    }
+
+    .header-left .logo {
+        height: 40px; /* Reduce logo size */
+    }
+
+    .header-right {
+        gap: 5px; /* Reduce spacing between items */
+    }
+
+    .scrollable {
+        overflow-x: auto;  /* Allow horizontal scrolling on smaller devices */
+        overflow-y: auto;  /* Allow vertical scrolling */
+        -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on mobile devices */
+    }
+
+    table {
+        width: 100%;  /* Ensure table does not overflow horizontally unnecessarily */
+        min-width: 600px; /* Set a minimum width so the table content can scroll horizontally if needed */
+    }
+
+    table td, table th {
+        white-space: nowrap; /* Prevent wrapping of table cell content */
+    }
+
+    .navbar ul li a {
+        padding: 10px; /* Make the navbar items smaller */
+        font-size: 14px; /* Reduce font size */
+    }
+
+    .name-container {
+        font-size: 16px; /* Adjust font size for smaller screens */
+    }
+
+    /* Reduce table column widths */
+    th.narrow-column {
+        max-width: 40px; /* Smaller column width for narrow screens */
+    }
+
+    table td, table th {
+        padding: 6px; /* Reduce padding for table cells */
+    }
+
+    /* Adjust the time-tracking table */
+    .time-tracking-table {
+        max-width: 100%; /* Ensure table fits within the screen width */
+    }
+
+    /* Adjust the submit button for small screens */
+    #submit-button {
+        padding: 8px 15px;
+        font-size: 14px;
+        bottom: 5%; /* Keep it sticky at a reasonable height */
+    }
+
+    /* Adjust the loading logo size */
+    #loading-logo {
+        width: 20%;
+        height: 20%; /* Make it larger on small screens */
+    }
+}
+
+/* For portrait orientation */
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+    /* Adjust body and content for portrait view */
+    body {
+        height: 100vh;
+    }
+
+    .table-wrapper {
+        flex-direction: column; /* Stack the tables vertically */
+        gap: 10px; /* Reduce gap between columns */
+    }
+
+    .scrollable {
+        max-height: 60vh; /* Limit scrollable area height */
+        padding-bottom: 15px;
+    }
+
+    .navbar ul li a {
+        padding: 8px; /* Smaller padding in portrait */
+        font-size: 13px; /* Reduce font size for navbar links */
+    }
+
+    /* Adjust time entry form width */
+    .time-entry-form {
+        width: 100%;
+    }
+
+    /* Reduce font size and input size in form */
+    input[type="time"],
+    input[type="number"],
+    input[type="date"] {
+        padding: 6px;
+        font-size: medium;
+    }
+}
+
+/* For landscape orientation */
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+    /* Adjust body and content for landscape view */
+    body {
+        height: calc(100vh - 40px); /* Account for the URL bar */
+        padding-bottom: 0; /* Less padding at the bottom */
+    }
+
+    .header-left .logo {
+        height: 35px; /* Even smaller logo in landscape mode */
+    }
+
+    .header-right {
+        gap: 5px;
+    }
+
+    /* Adjust navbar for landscape */
+    .navbar ul li a {
+        padding: 8px;
+        font-size: 12px; /* Smaller font for landscape mode */
+    }
+
+    /* Adjust the submit button */
+    #submit-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    /* Reduce scrollable area height in landscape */
+    .scrollable {
+        max-height: 65vh;
+    }
+}
+
+/* Adjust for very small devices like smartphones */
+@media only screen and (max-width: 480px) {
+    header {
+        padding: 5px; /* Less padding in the header */
+    }
+
+    .header-left .logo {
+        height: 30px; /* Even smaller logo */
+    }
+
+    .navbar ul li a {
+        padding: 6px; /* Smaller padding in navbar links */
+        font-size: 12px; /* Reduce font size */
+    }
+
+    table td, table th {
+        padding: 4px;  /* Reduce padding for smaller devices */
+        font-size: 12px;  /* Decrease font size to fit more content */
+    }
+
+    .name-container {
+        font-size: 14px;
+    }
+
+    .scrollable {
+        max-height: 60vh;  /* Restrict height to make the table more usable */
+    }
+
+    /* Make the table more compact for very small devices */
+    table {
+        min-width: 500px;  /* Adjust the minimum width to better fit smaller screens */
+    }
+
+    input[type="time"],
+    input[type="number"],
+    input[type="date"] {
+        padding: 5px;
+        font-size: small;
+    }
+
+    #submit-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+
+}
+
+#confirm-modal {
+  display: none; /* Shown only when needed */
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.45); /* dark overlay */
+  z-index: 2000;
+  justify-content: center; /* center content horizontally */
+  align-items: center;     /* center content vertically */
+  /* Use flex for perfect centering */
+  display: flex;
+}
+#confirm-modal .modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.yes-btn {
+  background: #29b64e;
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  font-size: 1.05em;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.yes-btn:hover { background: #25a045; }
+
+.no-btn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  font-size: 1.05em;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.no-btn:hover { background: #cb392d; }

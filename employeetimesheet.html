@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Access - Approve Timesheets</title>
+    <link rel="stylesheet" href="style/employeetimesheet.css">
+    <link rel="icon" href="/favicon3.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div id="loading-screen">
+        <img id="loading-logo" src="images/VANIR-transparent.png" alt="Vanir Installed Sales Logo">
+    </div>
+
+    <div id="main-content">
+        <main>
+            <header>
+                <div class="header-left">
+                    <a href="timesheet.html">
+                        <img src="images/vanir logo.png" alt="Vanir Installed Sales Logo" class="logo">
+                    </a>
+                    <div id="loading-indicator"></div>
+                </div>
+                <h3>Supervisor Portal</h3>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span id="user-email" class="clickable">supervisor@example.com</span>
+                        <a href="#" id="logout-button" class="logout-button">Logout</a>
+                    </div>
+                 
+                </div>
+            </header>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="approvetimeoff.html">Approve Timeoff requests</a></li>
+                    <li><a href="timesheet.html">Time Sheet</a></li>
+                    <li><a href="supervisor.html">CSV Download</a></li>
+                </ul>
+            </nav>
+
+            <h1>Approve Timesheets</h1>
+            <div id="message-container"></div>
+            <br>
+
+
+        <!-- Wrapper for the two tables -->
+
+    <div class="time-tracking-table scrollable">
+        <table id="timesheets-body">
+            <!-- Timesheets will be populated here -->
+        </table>
+</div>
+        </main>
+    </div>
+
+    <script src="js/employeetimesheet.js"></script>
+    <script src="js/huntergong.js"></script>
+    <script src="js/disable-script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+</body>
+</html>
