@@ -8,6 +8,40 @@
       margin: 0;
     }
 
+    .navbar {
+    background-color: var(--header-bg);
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    display: inline-block;
+    color: var(--text-color);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: #16a085;
+}
+
+.navbar ul li a:hover {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+}
+
     .form-container {
       background: #fff;
       padding: 25px;

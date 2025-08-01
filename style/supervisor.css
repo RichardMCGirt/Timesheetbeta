@@ -179,8 +179,6 @@ scrollbar-width: none; /* For Firefox */
 display: none; /* For Chrome, Safari, and Opera */
 }
 
-
-
 .time-entry-table {
     width: 70%;
     margin: 20px auto;
@@ -334,7 +332,6 @@ input[type="date"] {
     to { opacity: 0; }
 }
 
-
 #loading-screen {
     position: fixed;
     top: 0;
@@ -416,9 +413,6 @@ input[type="date"]:-webkit-autofill {
     color: black !important;;
 }
 
-
-
-
 #submit-button {
     position: sticky;
     bottom: 3%;
@@ -442,7 +436,6 @@ input[type="date"]:-webkit-autofill {
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
-
 
 @media (max-width: 768px) {
     .name-container {
