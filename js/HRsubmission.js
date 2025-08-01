@@ -1,5 +1,3 @@
-// Airtable Configs
-
 // Base A (Submissions)
 const AIRTABLE_API_KEY_A = "patW07BoKoJG3dsef.c533e11a7b2005c7ff8a2a4c53f145aa97049a0bed00d0fd82e513f664bcefd9"; 
 const BASE_A_ID = "appRplLVFnR1ZK8WH";
@@ -14,6 +12,10 @@ const TABLE_B_ID = "tblwtpHlA3CYpa02W";
 document.addEventListener("DOMContentLoaded", () => {
   const email = localStorage.getItem("userEmail") || "";
   document.getElementById("submitterEmail").value = email;
+
+  if (email) {
+    fetchUserRecords(email); // ✅ fetch past submissions
+  }
 });
 
 // Form submission
@@ -24,12 +26,6 @@ document.getElementById("airtableForm").addEventListener("submit", async (e) => 
   const submitterEmail = document.getElementById("submitterEmail").value;
   const notes = document.getElementById("notes").value;
 
-  console.log("📨 Form Values:", {
-    requestType,
-    submitterEmail,
-    notes
-  });
-
   // Format Submitted By (firstname lastname from email)
   let submittedBy = "";
   if (submitterEmail.includes("@")) {
@@ -37,45 +33,28 @@ document.getElementById("airtableForm").addEventListener("submit", async (e) => 
     const last = lastWithDomain.split("@")[0];
     submittedBy = `${capitalize(first)} ${capitalize(last)}`;
   }
-  console.log("👤 Submitted By:", submittedBy);
 
   try {
-    // 🔹 Step 1: Fetch Branch from Base B using API_KEY_B
-    console.log("🔎 Looking up Branch in Base B for email:", submitterEmail);
+    // 🔹 Step 1: Fetch Branch from Base B
     const branchRecord = await fetchBranchFromBaseB(submitterEmail);
+    let branchValue = branchRecord?.fields?.Branch || "";
+    let locationId = null;
+    if (branchValue) {
+      locationId = await fetchBranchIdFromBaseA(branchValue);
+    }
 
-  let branchValue = branchRecord?.fields?.Branch || "";
-let locationId = null;
-
-if (branchValue) {
-  locationId = await fetchBranchIdFromBaseA(branchValue);
-}
-
-
-    console.log("🏢 Branch Lookup Result:", {
-      branchRecord,
-      branchValue,
-      locationId
-    });
-
-    // 🔹 Step 2: Submit data to Base A using API_KEY_A
+    // 🔹 Step 2: Submit to Base A
     const payload = {
-fields: {
-  "Request type": requestType,
-  "Submitter Email": submitterEmail,
-  "Notes From Submitter": notes,
-  "Submitted By": submittedBy,
-  "Location": locationId ? [locationId] : []  // 👈 use the actual field name from Base A
-}
-
-};
-
-
-    console.log("📦 Payload being sent to Airtable Base A:", JSON.stringify(payload, null, 2));
+      fields: {
+        "Request type": requestType,
+        "Submitter Email": submitterEmail,
+        "Notes From Submitter": notes,
+        "Submitted By": submittedBy,
+        "Location": locationId ? [locationId] : []
+      }
+    };
 
     const url = `https://api.airtable.com/v0/${BASE_A_ID}/${TABLE_A_ID}`;
-    console.log("🌐 POST URL:", url);
-
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -84,8 +63,6 @@ fields: {
       },
       body: JSON.stringify(payload)
     });
-
-    console.log("📡 Response Status:", response.status, response.statusText);
 
     if (response.ok) {
       const successData = await response.json();
@@ -96,6 +73,10 @@ fields: {
       document.getElementById("airtableForm").reset();
       document.getElementById("submitterEmail").value =
         localStorage.getItem("userEmail") || "";
+
+      // 🔹 Refresh user records list
+      fetchUserRecords(submitterEmail);
+
     } else {
       const errorData = await response.json();
       console.error("❌ Airtable Error Response:", errorData);
@@ -109,64 +90,92 @@ fields: {
   }
 });
 
+// 🔹 Fetch past submissions for this user
+async function fetchUserRecords(email) {
+  try {
+    const formula = `{Submitter Email}="${email}"`;
+const url = `https://api.airtable.com/v0/${BASE_A_ID}/${TABLE_A_ID}?filterByFormula=${encodeURIComponent(formula)}&sort[0][field]=Date created&sort[0][direction]=desc`;
 
-// 🔹 Helper: Fetch Branch record from Base B
+    console.log("📡 Fetching User Records:", url);
+
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
+    });
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+    displayUserRecords(data.records);
+
+  } catch (err) {
+    console.error("❌ fetchUserRecords failed:", err.message);
+    document.getElementById("hrUserRecords").innerHTML =
+      "<p class='error'> No previous submisions last 45 days.</p>";
+  }
+}
+
+// 🔹 Display records in the page
+function displayUserRecords(records) {
+  const tableBody = document.getElementById("userRecordsTableBody");
+  tableBody.innerHTML = "";
+
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 45); // 45 days ago
+
+  records.forEach((rec) => {
+    const f = rec.fields;
+    const date = f["Date created"] || rec.createdTime;
+
+    // ⛔ Skip if older than 45 days
+    if (new Date(date) < cutoff) return;
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${f["Request type"] || ""}</td>
+      <td>${f["Notes From Submitter"] || ""}</td>
+      <td>${new Date(date).toLocaleDateString()}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+
+// 🔹 Fetch Branch record from Base B
 async function fetchBranchFromBaseB(email) {
   try {
-    const formula = `{Email}="${email}"`; // ✅ safer quotes
+    const formula = `{Email}="${email}"`;
     const url = `https://api.airtable.com/v0/${BASE_B_ID}/${TABLE_B_ID}?filterByFormula=${encodeURIComponent(formula)}`;
-
-    console.log("📡 Fetching Base B with:", { url, formula, BASE_B_ID, TABLE_B_ID });
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_B}` }
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status} – ${errorText}`);
-    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const data = await response.json();
+    return data.records?.[0] || null;
 
-    if (!data.records || data.records.length === 0) {
-      console.warn("⚠️ No records found in Base B for email:", email);
-      return null;
-    }
-
-    console.log("✅ Found Branch record:", data.records[0]);
-    return data.records[0];
   } catch (err) {
     console.error("❌ fetchBranchFromBaseB failed:", err.message);
     return null;
   }
 }
 
-// 🔹 Helper: Fetch Branch record from Base A by branch name
+// 🔹 Fetch Branch record from Base A by branch name
 async function fetchBranchIdFromBaseA(branchValue) {
   try {
-const formula = `{Location}="${branchValue}"`;
+    const formula = `{Location}="${branchValue}"`;
     const url = `https://api.airtable.com/v0/${BASE_A_ID}/tblgJHu0LR0IyziG7?filterByFormula=${encodeURIComponent(formula)}`;
-
-    console.log("📡 Fetching Branch ID from Base A with:", { url, formula });
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status} – ${errorText}`);
-    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const data = await response.json();
-    if (!data.records || data.records.length === 0) {
-      console.warn("⚠️ No branch match found in Base A for:", branchValue);
-      return null;
-    }
+    return data.records?.[0]?.id || null;
 
-    console.log("✅ Found Branch record in Base A:", data.records[0]);
-    return data.records[0].id;
   } catch (err) {
     console.error("❌ fetchBranchIdFromBaseA failed:", err.message);
     return null;
@@ -177,3 +186,10 @@ const formula = `{Location}="${branchValue}"`;
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
+
+// 🔹 Auto-grow notes textarea
+const notes = document.getElementById("notes");
+notes.addEventListener("input", function() {
+  this.style.height = "auto";
+  this.style.height = this.scrollHeight + "px";
+});
