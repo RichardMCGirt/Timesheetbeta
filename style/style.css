@@ -218,45 +218,51 @@ body {
 }
 
 .navbar {
-    background-color: var(--header-bg);
-    overflow: hidden;
-    padding: 10px;  /* Add padding to space out the navbar */
-    transition: background-color 0.3s ease;
-    border-radius: 15px; /* Rounded corners for the entire navbar */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for 3D effect */
+  background-color: var(--header-bg);
+  padding: 10px 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;              /* Make navbar itself a flex container */
+  justify-content: center;    /* Center the contents */
 }
 
 .navbar ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.navbar ul li {
-    display: inline;
+  list-style: none;
+  display: flex;              /* Force row layout */
+  flex-direction: row;        /* Explicit row direction */
+  justify-content: center;    /* Center items horizontally */
+  align-items: center;        /* Align vertically */
+  gap: 20px;                  /* Even space between items */
+  margin: 0;
+  padding: 0;
 }
 
 .navbar ul li a {
-    display: inline-block;
-    color: var(--bg-color);
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    background-color: #16a085;
-    border-radius: 10px; /* Rounded corners for each link */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Add shadow for 3D effect */
+  display: flex;              /* Center text inside button */
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  background-color: #16a085;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 500;
+
+  transition: transform 0.3s ease,
+              background-color 0.3s ease,
+              color 0.3s ease,
+              box-shadow 0.3s ease;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .navbar ul li a:hover {
-    background-color: var(--highlight-color);
-    color: black;
-    transform: translateY(-3px); /* Lift the button slightly */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Intensify shadow for hover effect */
+  background-color: var(--highlight-color);
+  color: black;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
+
 
 .error {
     color: red;

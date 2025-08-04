@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     fetchUserRecords(email); // fetch past submissions
   }
 
-  // 🔹 Populate dropdowns from Airtable field options
   // Map element IDs in your HTML form to Airtable field names
 const dropdownConfig = {
   department: "Department",                // Linked to Departments table
@@ -51,7 +50,6 @@ const dropdownConfig = {
 }
 
 });
-
 
 // ========================
 // Handle Help Desk Form Submit
@@ -228,7 +226,6 @@ async function fetchUserRecords(email) {
       "<p class='error'> No Help Desk submissions in last 45 days.</p>";
   }
 }
-
 
 // ========================
 // Display Submissions

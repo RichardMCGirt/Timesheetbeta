@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Airtable Submission Form</title>
+  <link rel="stylesheet" href="style/HRsub.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <ul>
+        <li><a href="timesheet.html">Time Sheet</a></li>
+                <li><a href="HRsub.html">HR Request</a></li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Help Desk Form -->
+ <div class="form-container">
+  <h2>Help Desk Request</h2>
+
+  <!-- Show logged-in email -->
+  <p>Logged in as: <strong id="emailDisplay"></strong></p>
+
+  <form id="helpDeskForm">
+    <!-- Hidden field for submitter email -->
+    <input type="hidden" id="submitterEmail" name="submitterEmail">
+
+    <!-- Department Dropdown -->
+    <label for="department">Department</label>
+    <select id="department" name="department" required>
+      <option value="">-- Select Department --</option>
+    </select>
+
+    <!-- IT Issue Dropdown -->
+    <label for="itIssue">IT Issue</label>
+    <select id="itIssue" name="itIssue">
+      <option value="">-- Select IT Issue --</option>
+    </select>
+
+    <!-- New Hire Setup Dropdown -->
+    <label for="newHireSetup">New Hire Setup</label>
+    <select id="newHireSetup" name="newHireSetup">
+      <option value="">-- Select Setup Item --</option>
+    </select>
+
+    <!-- AP Issue Dropdown -->
+    <label for="apIssue">AP Issue</label>
+    <select id="apIssue" name="apIssue">
+      <option value="">-- Select AP Issue --</option>
+    </select>
+
+    <!-- AR Issue Dropdown -->
+    <label for="arIssue">AR Issue</label>
+    <select id="arIssue" name="arIssue">
+      <option value="">-- Select AR Issue --</option>
+    </select>
+
+    <!-- Credit Card Issue Dropdown -->
+    <label for="creditCardIssue">Credit Card Issue</label>
+    <select id="creditCardIssue" name="creditCardIssue">
+      <option value="">-- Select CC Issue --</option>
+    </select>
+
+    <!-- Financial Report Issue Dropdown -->
+    <label for="financialReportIssue">Financial Report Issue</label>
+    <select id="financialReportIssue" name="financialReportIssue">
+      <option value="">-- Select Report Issue --</option>
+    </select>
+
+    <!-- Month of Financial Issue Dropdown -->
+ <label for="monthOfFinancialIssue">Month of Financial Issue</label>
+<select id="monthOfFinancialIssue" name="monthOfFinancialIssue">
+  <option value="">-- Select Month --</option>
+  <option value="January">January</option>
+  <option value="February">February</option>
+  <option value="March">March</option>
+  <option value="April">April</option>
+  <option value="May">May</option>
+  <option value="June">June</option>
+  <option value="July">July</option>
+  <option value="August">August</option>
+  <option value="September">September</option>
+  <option value="October">October</option>
+  <option value="November">November</option>
+  <option value="December">December</option>
+</select>
+
+
+    <!-- Priority Dropdown -->
+    <label for="priority">Priority</label>
+    <select id="priority" name="priority" required>
+      <option value="">-- Select Priority --</option>
+    </select>
+
+    <!-- Single line text inputs -->
+    <label for="doclinkId">Doclink Record ID</label>
+    <input type="text" id="doclinkId" name="doclinkId">
+
+    <label for="apInvoiceNumber">AP Invoice Number Issue</label>
+    <input type="text" id="apInvoiceNumber" name="apInvoiceNumber">
+
+    <label for="poNumber">PO Number Issue</label>
+    <input type="text" id="poNumber" name="poNumber">
+
+    <!-- Notes -->
+    <label for="notesHelp">Notes / Issue</label>
+    <textarea id="notesHelp" name="notesHelp" rows="4" spellcheck="true"
+              style="overflow:hidden; resize:none;"></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Message Area -->
+  <div id="helpDeskMessage"></div>
+
+  <!-- Past submissions -->
+<div id="helpDeskUserRecords"></div>
+</div>
+
+
+  <!-- <script src="js/HRsubmission.js"></script> -->
+    <script src="js/helpdesk.js"></script>
+
+</body>
+</html>
