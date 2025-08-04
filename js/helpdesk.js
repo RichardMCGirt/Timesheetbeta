@@ -181,27 +181,29 @@ async function populateDropdown(elementId, fieldName) {
     }
 
     // Case 2: Linked Record → fetch from linked table
-    if (field.type === "multipleRecordLinks" && field.options?.linkedTableId) {
-      console.log(`🔗 Field ${fieldName} is linked to table ${field.options.linkedTableId}`);
+   if (field.type === "multipleRecordLinks" && field.options?.linkedTableId) {
+  console.log(`🔗 Field ${fieldName} is linked to table ${field.options.linkedTableId}`);
 
-      const linkedUrl = `https://api.airtable.com/v0/${BASE_A_ID}/${field.options.linkedTableId}`;
-      const linkedResp = await fetch(linkedUrl, {
-        headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
-      });
+  const linkedUrl = `https://api.airtable.com/v0/${BASE_A_ID}/${field.options.linkedTableId}`;
+  const linkedResp = await fetch(linkedUrl, {
+    headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
+  });
 
-      if (!linkedResp.ok) {
-        console.error(`❌ Failed fetching linked table ${field.options.linkedTableId}`);
-        return;
-      }
+  if (!linkedResp.ok) {
+    console.error(`❌ Failed fetching linked table ${field.options.linkedTableId}`);
+    return;
+  }
 
-      const linkedData = await linkedResp.json();
-      linkedData.records.forEach(rec => {
-        const opt = document.createElement("option");
-        opt.value = rec.id; // store recordId for submission
-        opt.textContent = rec.fields["Name"] || rec.id; // adjust to correct primary field
-        selectEl.appendChild(opt);
-      });
-    }
+  const linkedData = await linkedResp.json();
+  linkedData.records.forEach(rec => {
+    const opt = document.createElement("option");
+ opt.value = rec.fields["Dept Name"] || rec.fields["Name"]; // ✅ use text
+opt.textContent = rec.fields["Dept Name"] || rec.fields["Name"];
+
+    selectEl.appendChild(opt);
+  });
+}
+
 
   } catch (err) {
     console.error(`❌ populateDropdown(${fieldName}) failed:`, err.message);
@@ -333,5 +335,73 @@ if (notesHelp) {
     this.style.height = this.scrollHeight + "px";
   });
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const departmentSelect = document.getElementById("department");
 
+  // Department → which field groups to show
+const departmentFieldMap = {
+  "IT": ["itIssue", "newHireSetup"],
+  "Accounts Payable": ["apIssue", "apInvoiceNumber", "doclinkId", "poNumber"], 
+  "Accounts Receivable": ["arIssue"], 
+  "Credit Cards": ["creditCardIssue"], 
+  "Finance": ["apInvoiceNumber", "poNumber", "financialReportIssue", "monthOfFinancialIssue"],
+  "Financial Reporting": ["financialReportIssue", "monthOfFinancialIssue"], // 👈 now shows both
+  "Operations": ["poNumber"],
+  "HR": ["newHireSetup"],
+  "Other": ["notesHelp"]
+};
+
+  // all possible fields that may need hiding
+  const allFieldIds = [
+    "itIssue", "newHireSetup", "apIssue", "arIssue",
+    "creditCardIssue", "financialReportIssue",
+    "monthOfFinancialIssue",
+    "apInvoiceNumber", "poNumber", "doclinkId",
+    "notesHelp"
+  ];
+
+  function updateFieldVisibility() {
+    const selectedDept = departmentSelect.value;
+    const fieldsToShow = departmentFieldMap[selectedDept] || [];
+
+    console.log("📌 Department changed:", selectedDept);
+    console.log("✅ Fields to show for this department:", fieldsToShow);
+
+    allFieldIds.forEach(id => {
+      const wrapper = document.getElementById(`group-${id}`);
+      if (!wrapper) {
+        console.warn(`⚠️ No wrapper found for: group-${id}`);
+        return;
+      }
+
+      // Always show Department + Priority
+      if (id === "department" || id === "priority") {
+        wrapper.style.display = "block";
+        console.log(`   🔓 Always showing: ${id}`);
+      } else {
+        if (fieldsToShow.includes(id)) {
+          wrapper.style.display = "block";
+          console.log(`   👁️ Showing: ${id}`);
+        } else {
+          wrapper.style.display = "none";
+          console.log(`   🙈 Hiding: ${id}`);
+        }
+      }
+    });
+
+    // Always keep Notes visible
+    const notesWrapper = document.getElementById("group-notesHelp");
+    if (notesWrapper) {
+      notesWrapper.style.display = "block";
+      console.log("   🔓 Always showing: notesHelp");
+    }
+  }
+
+  // run on page load
+  console.log("🚀 Initializing field visibility on page load...");
+  updateFieldVisibility();
+
+  // run every time Department changes
+  departmentSelect.addEventListener("change", updateFieldVisibility);
+});
 })();
