@@ -145,64 +145,69 @@ async function populateDropdown(elementId, fieldName) {
     console.log(`🔹 [populateDropdown] Starting for field: ${fieldName}, elementId: ${elementId}`);
 
     const url = `https://api.airtable.com/v0/meta/bases/${BASE_A_ID}/tables`;
-    console.log("🌐 Fetching schema from:", url);
-
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
     });
 
-    console.log("📡 Response status:", response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`❌ Schema fetch failed for ${fieldName}. HTTP ${response.status}. Body:`, errorText);
-      throw new Error(`Schema fetch failed: HTTP ${response.status}`);
+      console.error(`❌ Schema fetch failed for ${fieldName}. HTTP ${response.status}`, errorText);
+      return;
     }
 
     const data = await response.json();
-    console.log("✅ Schema fetch success. Tables available:", data.tables.map(t => t.name));
-
     const table = data.tables.find(t => t.id === TABLE_A_ID);
-    console.log("📑 Table fields:", table.fields.map(f => f.name));
-
-    console.log("🔎 Matching table ID:", TABLE_A_ID, "-> Found table:", table ? table.name : "❌ not found");
-
     if (!table) return;
 
     const field = table.fields.find(f => f.name === fieldName);
-    console.log("🔎 Looking for field:", fieldName, "-> Found:", field ? field.name : "❌ not found");
-
-    if (!field || !field.options) {
-      console.warn(`⚠️ Field ${fieldName} has no options or doesn’t exist in schema.`);
+    if (!field) {
+      console.warn(`⚠️ Field ${fieldName} not found.`);
       return;
     }
 
     const selectEl = document.getElementById(elementId);
-    if (!selectEl) {
-      console.warn(`⚠️ Element with id "${elementId}" not found in DOM.`);
+    if (!selectEl) return;
+    selectEl.innerHTML = `<option value="">-- Select ${fieldName} --</option>`;
+
+    // Case 1: Single/Multi Select
+    if (field.options && field.options.choices) {
+      field.options.choices.forEach(choice => {
+        const opt = document.createElement("option");
+        opt.value = choice.name;
+        opt.textContent = choice.name;
+        selectEl.appendChild(opt);
+      });
       return;
     }
 
-    // clear + add default option
-    selectEl.innerHTML = `<option value="">-- Select ${fieldName} --</option>`;
+    // Case 2: Linked Record → fetch from linked table
+    if (field.type === "multipleRecordLinks" && field.options?.linkedTableId) {
+      console.log(`🔗 Field ${fieldName} is linked to table ${field.options.linkedTableId}`);
 
-    console.log(`📋 Populating dropdown with ${field.options.choices.length} choices for ${fieldName}`);
+      const linkedUrl = `https://api.airtable.com/v0/${BASE_A_ID}/${field.options.linkedTableId}`;
+      const linkedResp = await fetch(linkedUrl, {
+        headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
+      });
 
-    // loop over the schema’s predefined options
-    field.options.choices.forEach(choice => {
-      console.log("   ➕ Adding option:", choice.name);
-      const opt = document.createElement("option");
-      opt.value = choice.name;
-      opt.textContent = choice.name;
-      selectEl.appendChild(opt);
-    });
+      if (!linkedResp.ok) {
+        console.error(`❌ Failed fetching linked table ${field.options.linkedTableId}`);
+        return;
+      }
 
-    console.log(`✅ Finished populating dropdown for ${fieldName}`);
+      const linkedData = await linkedResp.json();
+      linkedData.records.forEach(rec => {
+        const opt = document.createElement("option");
+        opt.value = rec.id; // store recordId for submission
+        opt.textContent = rec.fields["Name"] || rec.id; // adjust to correct primary field
+        selectEl.appendChild(opt);
+      });
+    }
 
   } catch (err) {
     console.error(`❌ populateDropdown(${fieldName}) failed:`, err.message);
   }
 }
+
 
 // ========================
 // Fetch Past Submissions
@@ -277,7 +282,6 @@ let container = document.getElementById("helpDeskUserRecords");
   container.appendChild(table);
 }
 
-
 // ========================
 // Branch Lookup Helpers
 // ========================
@@ -329,23 +333,5 @@ if (notesHelp) {
     this.style.height = this.scrollHeight + "px";
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 })();
