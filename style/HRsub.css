@@ -47,6 +47,7 @@ body {
 
 /* Form Containers */
 .form-container {
+  display: none;
   background: #fff;
   padding: 25px 30px;
   border-radius: 12px;

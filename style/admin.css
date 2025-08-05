@@ -1,0 +1,153 @@
+/* ================================
+   Admin Portal Styles
+   ================================ */
+
+/* General Page Styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f7f9fc;
+  color: #333;
+}
+
+/* Header */
+header {
+  background: #1d3557; /* Dark blue */
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+header h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+
+/* Main Container */
+main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+thead {
+  background: #457b9d; /* Teal-ish */
+  color: #fff;
+}
+
+thead th {
+  padding: 12px 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 12px 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+/* Alternate row colors */
+tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Comments */
+td p {
+  margin: 4px 0;
+}
+
+td strong {
+  color: #1d3557;
+}
+
+/* Airtable Link */
+td a {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #e63946; /* Red */
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+td a:hover {
+  background: #d62828;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    padding: 10px;
+  }
+
+  tbody td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #457b9d;
+  }
+}
+/* Comment Box */
+.comment-box {
+  width: 83%;
+  min-height: 60px;
+  padding: 8px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  margin-bottom: 6px;
+}
+
+/* Comment Button */
+.comment-btn {
+  background: #1d3557; /* Dark blue */
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.comment-btn:hover {
+  background: #457b9d; /* Lighter blue */
+}
