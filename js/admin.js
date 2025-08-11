@@ -7,24 +7,46 @@ const COMMENTS_TABLE_ID = "tblYCZpJ5PvOVaUww";
 // ✅ Fetch ALL submissions
 async function fetchAllRecords() {
   try {
-    const url = `https://api.airtable.com/v0/${BASE_A_ID}/${TABLE_A_ID}?sort[0][field]=Date created&sort[0][direction]=desc&maxRecords=50`;
+    let allRecords = [];
+    let offset = null;
+    const maxPerPage = 50;
 
-    console.log("📡 Fetching ALL submissions:", url);
+    do {
+      // Build Airtable URL with sorting, filtering, and pagination
+      let url = `https://api.airtable.com/v0/${BASE_A_ID}/${TABLE_A_ID}?sort[0][field]=Date created&sort[0][direction]=desc&maxRecords=${maxPerPage}`;
 
-    const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
-    });
+      // Filter for Status = "Pending"
+      const filter = encodeURIComponent(`{Status} = "Pending"`);
+      url += `&filterByFormula=${filter}`;
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      // Add offset if continuing pagination
+      if (offset) {
+        url += `&offset=${offset}`;
+      }
 
-    const data = await response.json();
-    console.log("✅ All Submissions:", data);
+      console.log("📡 Fetching submissions page:", url);
 
-    const submissionIds = data.records.map(r => r.id);
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+      console.log("✅ Page records:", data);
+
+      allRecords = allRecords.concat(data.records);
+      offset = data.offset || null; // Prepare for next page if exists
+    } while (offset);
+
+    console.log(`📦 Total matching records: ${allRecords.length}`);
+
+    // Get record IDs for comments
+    const submissionIds = allRecords.map(r => r.id);
 
     // Fetch related comments
     const comments = await fetchComments(submissionIds);
-    displayAdminRecords(data.records, comments);
+    displayAdminRecords(allRecords, comments);
 
   } catch (err) {
     console.error("❌ fetchAllRecords failed:", err.message);
@@ -32,6 +54,7 @@ async function fetchAllRecords() {
       "<tr><td colspan='7'>Error loading submissions.</td></tr>";
   }
 }
+
 
 // ✅ Fetch Comments (re-use existing logic)
 async function fetchComments(submissionIds) {
@@ -61,7 +84,6 @@ async function fetchComments(submissionIds) {
   return grouped;
 }
 
-// ✅ Display All Records
 // ✅ Display All Records (with comment box)
 function displayAdminRecords(records, commentsBySubmission) {
   const tableBody = document.getElementById("adminRecordsTableBody");
