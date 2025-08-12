@@ -4,18 +4,17 @@
 const AIRTABLE_API_KEY_A = "patW07BoKoJG3dsef.c533e11a7b2005c7ff8a2a4c53f145aa97049a0bed00d0fd82e513f664bcefd9"; 
 const BASE_A_ID = "apphdFfbeJpVbfsCT";
 const TABLE_A_ID = "tblIs8fZoorhIQajG";
-const baseIdA   = "apphdFfbeJpVbfsCT";  // submissions base
-const tableIdA  = "tblIs8fZoorhIQajG";  // Help Desk Submissions table
+const baseIdA   = "apphdFfbeJpVbfsCT";  
+const tableIdA  = "tblIs8fZoorhIQajG"; 
 // Correct
-const locationTableIdA = "tblyWUOD76Pw7Ay19"; // ✅ Locations table
+const locationTableIdA = "tblyWUOD76Pw7Ay19"; 
 const apiKeyA = "patW07BoKoJG3dsef.c533e11a7b2005c7ff8a2a4c53f145aa97049a0bed00d0fd82e513f664bcefd9"; 
 
 // Base B (Branch/Location Lookup)
 const apiKeyB = "patokyvn0X2ejcRQi.5d7cfe93b49248f724efdd9a40a365e6c1844e77cdeace1dcd7454c5edf10d9a"; 
-const baseIdB   = "appehs4OWDzGWYCrP";  // employee/branch base
-const tableIdB  = "tblwtpHlA3CYpa02W";  // employee email → branchW";
+const baseIdB   = "appehs4OWDzGWYCrP";  
+const tableIdB  = "tblwtpHlA3CYpa02W";  
 
-// Debug: Fetch schema for submissions table
 // Debug: Fetch schema for submissions table
 (async () => {
   try {
@@ -27,16 +26,13 @@ const tableIdB  = "tblwtpHlA3CYpa02W";  // employee email → branchW";
 
     const table = data.tables.find(t => t.id === TABLE_A_ID);
 
-    console.log("📑 Full schema dump for Help Desk Submissions:");
     table.fields.forEach(f => {
-      console.log(`   • ${f.name} → type: ${f.type}`, f);
     });
 
   } catch (err) {
     console.error("❌ Schema fetch failed:", err);
   }
 })();
-
 
 // ========================
 // Init - Auto-fill email & populate dropdowns
@@ -60,7 +56,7 @@ const dropdownConfig = {
   department: "Department",                // Linked to Departments table
   itIssue: "IT Issue(s)",                  // Multi-select
   priority: "Priority",   
-    newHireSetup: "New Hire Setup",              
+  newHireSetup: "New Hire Setup",              
   location: "Location",                    // Linked to Locations table
   status: "Status",                        // Status field
   assignee: "Assignee",                    // Assignee
@@ -72,17 +68,12 @@ const dropdownConfig = {
   financialReportsIssue: "Financial Reports Issue", // Financial Reports
 };
 
-
   for (const [elementId, fieldName] of Object.entries(dropdownConfig)) {
   await populateDropdown(elementId, fieldName);
 }
-
 });
 
 
-// ========================
-// Handle Help Desk Form Submit
-// ========================
 // ========================
 // Handle Help Desk Form Submit
 // ========================
@@ -108,7 +99,7 @@ document.getElementById("helpDeskForm").addEventListener("submit", async (e) => 
     "AP Invoice Number Issue": document.getElementById("apInvoiceNumber").value,
     "PO Number Issue": document.getElementById("poNumber").value,
     "Notes/Issue": document.getElementById("notesHelp").value,
-    "Submitter Email": submitterEmail,
+    "Submitted by Email": submitterEmail,
     "Submitted By": submittedBy
   };
 
@@ -127,59 +118,104 @@ const locationMap = {
   "Wilmington": "rec4QOa6w2qIC5mqn"
 };
 
-// later in your submit handler:
+// ... keep your branch lookup as-is ...
 const branchValue = await fetchBranchFromBaseB(submitterEmail);
 if (branchValue && locationMap[branchValue]) {
-  payloadFields["Location"] = [locationMap[branchValue]];
+  payloadFields["Location"] = [locationMap[branchValue]]; // will normalize below
 }
-    console.log("🌿 Branch from Base B:", branchValue);
 
-    // 🔹 Step 2: Get Location recordId from Base A using branch name
-    if (branchValue) {
-      const locationId = await fetchBranchIdFromBaseA(branchValue);
-      console.log("📌 Location recordId:", locationId);
+// Optional: override via lookup-by-name (your existing code)
+if (branchValue) {
+  const locationId = await fetchBranchIdFromBaseA(branchValue);
+  if (locationId) {
+    payloadFields["Location"] = [locationId]; // will normalize below
+  } else {
+    console.warn(`⚠️ No matching Location record found for branch: ${branchValue}`);
+  }
+}
 
-      if (locationId) {
-        payloadFields["Location"] = [locationId]; // ✅ must be an array of IDs
-      } else {
-        console.warn(`⚠️ No matching Location record found for branch: ${branchValue}`);
-      }
-    }
+// ✅ FINAL NORMALIZATION + DEEP LOG just before POST
+payloadFields["Location"] = toLinkedRecordArray(payloadFields["Location"]);
 
-// 🔹 Step 3: Submit into Help Desk Submissions (Base A)
+if (!payloadFields["Location"]) {
+  throw new Error("Location must be an array of record IDs or [{id:'rec...'}].");
+}
+const locField = await getFieldInfo(TABLE_A_ID, "Location");
+if (!locField) throw new Error('Field "Location" not found in schema.');
+
+if (["lookup", "rollup", "formula"].includes(locField.type)) {
+  throw new Error('🛑 "Location" is not writable (lookup/rollup/formula). Write to the **source linked field** instead.');
+}
+
+if (!["multipleRecordLinks", "singleRecordLink"].includes(locField.type)) {
+  throw new Error(`🛑 "Location" is type ${locField.type}. For this type, don’t send an array of record IDs.`);
+}
+
+// ---- POST with improved debug logging ----
 const url = `https://api.airtable.com/v0/${baseIdA}/${tableIdA}`;
-console.log("📤 Submitting payload to Airtable:", {
-  url,
-  payloadFields
-});
 
-// ⬇️ Place the new log block here
-console.log("📦 Final payloadFields about to submit:", JSON.stringify(payloadFields, null, 2));
-if (Array.isArray(payloadFields["Location"])) {
-  console.log("✅ Location is an array:", payloadFields["Location"]);
+// Special check for Location field
+if ("Location" in payloadFields) {
+  console.log("   🔍 Location type:", Array.isArray(payloadFields["Location"]) ? "Array" : typeof payloadFields["Location"]);
+  if (Array.isArray(payloadFields["Location"])) {
+    console.log("   📋 Location length:", payloadFields["Location"].length);
+    payloadFields["Location"].forEach((val, idx) => {
+      console.log(`      [${idx}]`, val, typeof val);
+    });
+  } else {
+    console.warn("   ⚠️ Location is not an array. May cause 422.");
+  }
 } else {
-  console.error("❌ Location is not an array of record IDs:", payloadFields["Location"]);
+  console.warn("   ⚠️ No Location field present in payloadFields.");
 }
 
-const response = await fetch(url, {
-  method: "POST",
-  headers: {
-    Authorization: `Bearer ${apiKeyA}`,
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ fields: payloadFields })
-});
+let response, data;
+try {
+  response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKeyA}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ fields: payloadFields })
+  });
+} catch (networkErr) {
+  console.error("💥 Network/Fetch failed before Airtable responded:", networkErr);
+  throw networkErr;
+}
 
+// Log raw status before parsing body
+console.log("📥 Airtable raw status:", response.status, response.statusText);
 
-// log raw response status
-console.log("📥 Airtable response status:", response.status, response.statusText);
+// Try reading body
+let rawText;
+try {
+  rawText = await response.text();
+} catch (readErr) {
+  console.error("💥 Failed to read Airtable response body:", readErr);
+  throw readErr;
+}
 
-const data = await response.json();
-console.log("📥 Airtable response body:", data);
+// Try parsing JSON, fallback to text
+try {
+  data = JSON.parse(rawText);
+} catch (_) {
+  data = rawText;
+}
+
+console.log("📥 Airtable parsed body:", data);
 
 if (!response.ok) {
-  console.error("❌ Airtable rejected submission:", data);
-  throw new Error(JSON.stringify(data));
+  if (response.status === 422) {
+    console.error("❌ 422: Airtable rejected submission.");
+    console.error("   📜 Full Airtable error JSON:", JSON.stringify(data, null, 2));
+    console.error("   💡 Troubleshooting tips:");
+    console.error("     • Confirm field names exactly match your Airtable schema.");
+    console.error("     • For linked fields like Location, send an array of record IDs (strings) — e.g., ['rec123...']");
+    console.error("     • Ensure the record IDs exist in the linked table.");
+    console.error("     • Ensure the field is a real link, not a lookup/rollup/formula.");
+  }
+  throw new Error(typeof data === "string" ? data : JSON.stringify(data));
 }
 
 console.log("✅ Submission success:", data);
@@ -190,11 +226,19 @@ console.log("✅ Submission success:", data);
   }
 });
 
+// --- add this helper near the top (once) ---
+function toLinkedRecordArray(value) {
+  // Accept: "rec123", ["rec123"], [{id:"rec123"}]
+  if (!value) return [];
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value) && value.every(v => typeof v === "string")) return value;
+  if (Array.isArray(value) && value.every(v => v && typeof v === "object" && typeof v.id === "string")) {
+    return value.map(x => x.id);
+  }
+  console.error("❌ Not normalizable to array of record IDs (strings):", value);
+  return null;
+}
 
-
-// ========================
-// Fetch Dropdown Options from Airtable Schema
-// ========================
 // ========================
 // Fetch Dropdown Options from Airtable Schema
 // ========================
@@ -281,29 +325,89 @@ async function populateDropdown(elementId, fieldName) {
   }
 }
 
-
-
 // ========================
 // Fetch Past Submissions
 // ========================
 async function fetchUserRecords(email) {
   try {
-    const formula = `{Submitted By}="${email}"`;
-    const url = `https://api.airtable.com/v0/${BASE_A_ID}/${TABLE_A_ID}?filterByFormula=${encodeURIComponent(formula)}&sort[0][field]=Date created&sort[0][direction]=desc`;
+    if (!email) {
+      console.warn("⚠️ fetchUserRecords called without an email.");
+      document.getElementById("helpDeskUserRecords").innerHTML =
+        "<p class='error'> No email found.</p>";
+      return;
+    }
+
+    // Prefer filtering by the field that actually stores the email
+    // If you want to filter by the Name instead, change filterField to "Submitted By"
+    const filterField = "Submitted By Email"; // <-- matches what you POST
+    const formula = `{${filterField}}="${email}"`;
+
+    const url =
+      `https://api.airtable.com/v0/${BASE_A_ID}/${TABLE_A_ID}` +
+      `?filterByFormula=${encodeURIComponent(formula)}` +
+      `&sort[0][field]=${encodeURIComponent("Date Created")}` + // ensure exact field name
+      `&sort[0][direction]=desc`;
+
+    console.log("📡 fetchUserRecords URL:", url);
+    console.log("🔎 filterByFormula:", formula);
 
     const response = await fetch(url, {
       headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` }
     });
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    displayUserRecords(data.records);
+    // Always try to read the body so we can show Airtable's 422 details
+    let bodyText = "";
+    let bodyJson = null;
+    try {
+      bodyText = await response.text();
+      try {
+        bodyJson = JSON.parse(bodyText);
+      } catch (_) {
+        // not JSON, keep text
+      }
+    } catch (e) {
+      console.warn("⚠️ Could not read response body:", e);
+    }
+
+    console.log("📥 fetchUserRecords status:", response.status, response.statusText);
+    if (bodyJson) {
+      console.log("📥 fetchUserRecords body (json):", bodyJson);
+    } else {
+      console.log("📥 fetchUserRecords body (text):", bodyText);
+    }
+
+    if (!response.ok) {
+      // Helpful hints for 422
+      if (response.status === 422) {
+        console.error(
+          "❌ 422 Unprocessable Content.\n" +
+          "   • Airtable’s error JSON usually says 'Unknown field names' or 'The formula for filterByFormula is invalid'."
+        );
+      }
+      // Show Airtable’s error body verbatim for debugging
+      throw new Error(bodyText || `HTTP ${response.status}`);
+    }
+
+    // If we got here, OK
+    const data = bodyJson || JSON.parse(bodyText || "{}");
+    displayUserRecords(data.records || []);
 
   } catch (err) {
-    console.error("❌ fetchUserRecords failed:", err.message);
-    document.getElementById("helpDeskUserRecords").innerHTML =
-      "<p class='error'> No Help Desk submissions in last 45 days.</p>";
+    console.error("❌ fetchUserRecords failed:", err.message || err);
+    const el = document.getElementById("helpDeskUserRecords");
+    if (el) {
+      el.innerHTML = "<p class='error'> No Help Desk submissions in last 45 days.</p>";
+    }
   }
+}
+async function getFieldInfo(tableId, fieldName) {
+  const url = `https://api.airtable.com/v0/meta/bases/${BASE_A_ID}/tables`;
+  const resp = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_API_KEY_A}` } });
+  const data = await resp.json();
+  const table = data.tables.find(t => t.id === tableId);
+  const field = table?.fields?.find(f => f.name === fieldName);
+  console.log(`🔎 Field info for "${fieldName}":`, field);
+  return field;
 }
 
 // ========================
@@ -344,7 +448,7 @@ let container = document.getElementById("helpDeskUserRecords");
 
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${f["Submitter Email"] || ""}</td>
+      <td>${f["Submitted By Email"] || ""}</td>
       <td>${f["Department"] || ""}</td>
       <td>${f["Priority"] || ""}</td>
       <td>${f["Notes/Issue"] || ""}</td>
@@ -403,7 +507,6 @@ async function fetchBranchIdFromBaseA(branchValue) {
   }
 
   const data = await resp.json();
-  console.log("✅ Location lookup result:", data);
 
   const recordId = data.records[0]?.id || null;
 
@@ -412,7 +515,6 @@ async function fetchBranchIdFromBaseA(branchValue) {
   } else {
     console.warn(`⚠️ No Location record found for: ${branchValue}`);
   }
-
   return recordId;
 }
 
@@ -460,9 +562,6 @@ const departmentFieldMap = {
     const selectedDept = departmentSelect.value;
     const fieldsToShow = departmentFieldMap[selectedDept] || [];
 
-    console.log("📌 Department changed:", selectedDept);
-    console.log("✅ Fields to show for this department:", fieldsToShow);
-
     allFieldIds.forEach(id => {
       const wrapper = document.getElementById(`group-${id}`);
       if (!wrapper) {
@@ -473,14 +572,11 @@ const departmentFieldMap = {
       // Always show Department + Priority
       if (id === "department" || id === "priority") {
         wrapper.style.display = "block";
-        console.log(`   🔓 Always showing: ${id}`);
       } else {
         if (fieldsToShow.includes(id)) {
           wrapper.style.display = "block";
-          console.log(`   👁️ Showing: ${id}`);
         } else {
           wrapper.style.display = "none";
-          console.log(`   🙈 Hiding: ${id}`);
         }
       }
     });
@@ -489,17 +585,14 @@ const departmentFieldMap = {
     const notesWrapper = document.getElementById("group-notesHelp");
     if (notesWrapper) {
       notesWrapper.style.display = "block";
-      console.log("   🔓 Always showing: notesHelp");
     }
   }
 
   // run on page load
-  console.log("🚀 Initializing field visibility on page load...");
   updateFieldVisibility();
 
   // run every time Department changes
   departmentSelect.addEventListener("change", updateFieldVisibility);
 });
-
 
 })();

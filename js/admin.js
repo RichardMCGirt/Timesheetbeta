@@ -50,11 +50,12 @@ async function fetchAllRecords() {
 
   } catch (err) {
     console.error("❌ fetchAllRecords failed:", err.message);
-    document.getElementById("adminRecordsTableBody").innerHTML =
-      "<tr><td colspan='7'>Error loading submissions.</td></tr>";
+    const tbody = document.getElementById("adminRecordsTableBody");
+    if (tbody) {
+      tbody.innerHTML = "<tr><td colspan='8'>Error loading submissions.</td></tr>";
+    }
   }
 }
-
 
 // ✅ Fetch Comments (re-use existing logic)
 async function fetchComments(submissionIds) {
@@ -84,9 +85,21 @@ async function fetchComments(submissionIds) {
   return grouped;
 }
 
+// 🕒 Helper: Format timestamp
+function formatTimestamp(ts) {
+  if (!ts) return "";
+  try {
+    // Use local date+time; customize options if you want a specific format
+    return new Date(ts).toLocaleString();
+  } catch {
+    return String(ts);
+  }
+}
+
 // ✅ Display All Records (with comment box)
 function displayAdminRecords(records, commentsBySubmission) {
   const tableBody = document.getElementById("adminRecordsTableBody");
+  if (!tableBody) return;
   tableBody.innerHTML = "";
 
   records.forEach((rec) => {
@@ -94,12 +107,21 @@ function displayAdminRecords(records, commentsBySubmission) {
     const date = f["Timestamp"] || rec.createdTime;
     const recordUrl = `https://airtable.com/${BASE_A_ID}/${TABLE_A_ID}/${rec.id}`;
 
-    // Show existing comments
-    const comments = (commentsBySubmission[rec.id] || []).map(c => {
-      const user = c.fields.User || "Unknown";
-      const text = c.fields.Comment || "";
-      return `<p><strong>${user}:</strong> ${text}</p>`;
-    }).join("") || "<p>No comments yet</p>";
+    // Show existing comments (now with timestamp)
+    const comments = (commentsBySubmission[rec.id] || [])
+      .map(c => {
+        const user = c.fields.User || "Unknown";
+        const text = c.fields.Comment || "";
+        const ts = c.fields.Timestamp || c.createdTime; // prefer explicit field
+        const when = formatTimestamp(ts);
+        return `
+          <div class="comment">
+            <div class="comment-meta"><strong>${user}</strong> • <span class="comment-time">${when}</span></div>
+            <div class="comment-text">${text}</div>
+          </div>
+        `;
+      })
+      .join("") || "<p>No comments yet</p>";
 
     // Build row
     const row = document.createElement("tr");
@@ -108,7 +130,7 @@ function displayAdminRecords(records, commentsBySubmission) {
       <td data-label="Notes">${f["Notes From Submitter"] || ""}</td>
       <td data-label="Submitted By">${f["Submitted By"] || ""}</td>
       <td data-label="Email">${f["Submitter Email"] || ""}</td>
-      <td data-label="Date">${new Date(date).toLocaleDateString()}</td>
+      <td data-label="Date created">${new Date(date).toLocaleDateString()}</td>
       <td data-label="Comments">${comments}</td>
       <td data-label="New Comment">
         <textarea id="comment-${rec.id}" class="comment-box" placeholder="Write a comment..."></textarea>
@@ -139,6 +161,8 @@ async function addAdminComment(submissionId) {
       "Comment": newComment,
       "Submission": [submissionId],
       "User": userName
+      // If your Comments table has a Created time field named "Timestamp",
+      // Airtable will populate it automatically on create—no need to send it.
     }
   };
 
@@ -157,7 +181,8 @@ async function addAdminComment(submissionId) {
 
     console.log("✅ Comment posted by Human Resources");
     commentBox.value = "";
-    fetchAllRecords(); // 🔄 refresh table
+    // 🔄 Refresh table so the new comment (with server-side timestamp) appears
+    fetchAllRecords();
 
   } catch (err) {
     console.error("❌ Error adding admin comment:", err);
@@ -170,7 +195,6 @@ function capitalize(str) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
-
 
 // Run on page load
 document.addEventListener("DOMContentLoaded", fetchAllRecords);
